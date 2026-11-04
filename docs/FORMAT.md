@@ -1,7 +1,7 @@
-# Output format specification
+# Output format spec
 
-The contract every MAKE_VIDEO render is built and verified against.
-All times in seconds.
+What every MAKE_VIDEO render has to match. If a render misses this,
+the bat treats it as failed. All times are in seconds.
 
 ## Container and streams
 
@@ -26,49 +26,55 @@ All times in seconds.
 
 `aresample 48 kHz -> [silence 6.0 + clip] concat -> loudnorm -> apad -> atrim to total`
 
-- Loudnorm: single pass, `I=-14 : TP=-1.0 : LRA=11` (YouTube target).
-- The silence is concatenated before loudnorm, never delayed after it:
-  a delay filter placed downstream of loudnorm loses the offset.
+- Loudnorm is a single pass, `I=-14 : TP=-1.0 : LRA=11`. That is the
+  YouTube target.
+- The silence is glued on before loudnorm, never delayed in after it.
+  A delay filter after loudnorm loses the offset. Measured, not theory:
+  a 3.0 s test burst with a 5.5 s delay placed after loudnorm came out
+  at 3.04 s.
 
 ## Subscribe pops (only when `subscribe.png` is present)
 
-- Windows: 5.0 each. First window starts at `max(6.5, 0.55 * total)`;
-  further windows every 30.0. A window is only emitted if it ends by
+- Each window is 5.0 s. The first starts at `max(6.5, 0.55 * total)`,
+  the rest follow every 30.0 s. A window is only used if it ends by
   `total - 1.2`.
-- Graphic fade: 0.15 in/out. Dim envelope fade: 0.25 in/out.
-- While a window is open the photo is multiplied by 0.0625: exposure
-  -4 EV (`DIM=0.9375` black overlay alpha in the graph).
-- The graphic is full-frame (3840x2160 canvas, artwork placed by the
-  asset itself), so its size and position on screen are whatever the
-  PNG carries.
-- Transparent PNG (alpha pix_fmt) renders on the overlay path;
-  black-backed PNG renders on the screen-blend path. The path is chosen
+- The graphic fades in and out over 0.15 s. The dim envelope fades over
+  0.25 s.
+- While a window is open the photo is multiplied by 0.0625, which is
+  exposure -4 EV. In the graph this is a black overlay at alpha
+  `DIM=0.9375`.
+- The graphic is a full-frame 3840x2160 canvas and the artwork sits
+  inside the PNG itself, so its size and position on screen are
+  whatever the PNG carries.
+- A transparent PNG (alpha pixel format) goes through the overlay path.
+  A black-backed PNG goes through the screen-blend path. The bat picks
   by probing the file's pixel format with ffprobe.
 
 ## Encoders
 
-- NVENC (preferred, probed with a real test encode):
+- NVENC, if a real test encode passes:
   `h264_nvenc, preset p5, tune hq, VBR CQ 22, maxrate 40M, bufsize 80M,
   spatial-aq 1`.
 - CPU fallback: `libx264, preset medium, tune stillimage, crf 16`.
 - Every graph ends with `scale=out_range=tv:out_color_matrix=bt709,
-  format=yuv420p` and the stream is tagged `-color_range tv`. This is
-  what keeps range-assuming players from re-expanding the picture.
+  format=yuv420p` and the stream is tagged `-color_range tv`. That tag
+  is what stops range-assuming players from stretching the picture on
+  playback.
 
 ## Render verification
 
-A render only reports `[ ok ]` when all three hold:
+A render only reports `[ ok ]` when all three of these hold:
 
-1. The previous output file was deleted before the render started
-   (a stale file can never pass as a new render).
+1. The old output file was deleted before the render started, so a
+   stale file can never pass as a new render.
 2. ffmpeg exited with code 0.
 3. The finished file's probed duration is within 2.0 s of the computed
    timeline.
 
-Failed renders delete their partial output. After a successful render
-the bat also measures the first-sound onset with silencedetect and
-prints it; the built-in portion is always 6.0 s, anything beyond that
-is the clip's own lead-in.
+Failed renders delete their partial output. After a good render the
+bat measures where the sound actually starts, with silencedetect, and
+prints it. The built-in part is always 6.0 s. Anything past that is
+the clip's own lead-in.
 
 ## Preparation specs (stage 1)
 
