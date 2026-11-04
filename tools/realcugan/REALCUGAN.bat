@@ -217,7 +217,7 @@ set "NUM_NOSE="
 if "%HASPRO%"=="NO" goto :ms_pro_done
 set /a CNT+=1
 set "NUM_PRO=%CNT%"
-echo   [%CNT%]  models-pro     Best quality for illustrations and anime
+echo   [%CNT%]  models-pro     2x and 3x - denoise -1, 0 and 3
 :ms_pro_done
 if "%HASSE%"=="NO" goto :ms_se_done
 set /a CNT+=1

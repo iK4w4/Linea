@@ -58,14 +58,19 @@ docs/FORMAT.md                         the exact output specification
   cache folder, then on PATH. If it finds nothing it downloads the
   gyan.dev essentials build once. REALCUGAN does the same lookup but
   never downloads.
-- For voice separation, Python 3.10 (3.9 works too) and the
-  MB-Roformer-Kim model inside an Ultimate Vocal Remover v5.6.1 install.
+- For voice separation, Python 3.10 (3.9 works too) and a vocal model
+  inside an Ultimate Vocal Remover v5.6.1 install. Models come from UVR
+  itself, the download center inside the app lists them. Put the .ckpt
+  in UVR's `models\MDX_Net_Models` folder. The bats use the model they
+  find there, or the one file you pin with MODEL_PATH.
   UVR itself is GUI-only, so SETUP_CLEAN_VOICE.bat installs the
   `uvr-headless-runner` package into a private venv at
   `%LOCALAPPDATA%\VideoPipeline\CleanVoice\venv` and the bats drive that.
   UVR is not modified.
-- For image upscaling in stage 1, a portable Real-ESRGAN ncnn build with
-  the `realesrgan-x4plus-anime` model. The bat checks the common folders
+- For image upscaling in stage 1, a portable Real-ESRGAN ncnn build
+  with its models folder. Which model runs is the I_MODEL setting at
+  the top of ALL_IN_ONE. The ncnn release ships several models and
+  their names say what they are for. The bat checks the common folders
   first, then searches the disks, and caches the path it finds.
 - For stage 2, a portable Real-CUGAN ncnn build (`realcugan-ncnn-vulkan`)
   sitting next to REALCUGAN.bat, with any of the `models-pro`,
@@ -162,10 +167,10 @@ skipped by setting the path variable at the top of the file instead
 - ffmpeg not found (MAKE_VIDEO). The download failed or was blocked.
   Get the gyan.dev essentials build yourself and put ffmpeg.exe and
   ffprobe.exe next to MAKE_VIDEO.bat.
-- MB-Roformer-Kim model not found. The bats check the standard UVR
-  folders first, then search the whole PC, once. If the model lives
-  somewhere odd, set MODEL_PATH at the top of the bat to the full path
-  of the .ckpt file.
+- Voice model not found. The bats check UVR's `models\MDX_Net_Models`
+  folders first, then search the whole PC for that folder, once. If
+  your model lives somewhere odd, set MODEL_PATH at the top of the bat
+  to the full path of the .ckpt file.
 - The progress monitor could not start (REALCUGAN). The monitor is a
   PowerShell script the bat pulls out of itself. Antivirus or a strict
   execution policy can block it, and the bat cannot run without it.

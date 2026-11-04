@@ -1,21 +1,22 @@
 @echo off
 setlocal EnableDelayedExpansion
-title Clean Voice - UVR batch (MB-Roformer-Kim, vocals only, WAV)
+title Clean Voice - UVR batch (vocals only, WAV)
 rem ============================================================================
 rem  CLEAN_VOICE_ALL.bat  v2  -  part of Linea (https://github.com/iK4w4/Linea)
 rem  Copyright (c) 2026 Kawa (@iK4w4) - MIT License
 rem  v2: model hunt upgraded - v1 only checked 5 guessed UVR folders and
 rem  missed non-standard installs. v2 falls back to a full-PC PowerShell
-rem  search for the Kim model and CACHES the found path, so later runs are
+rem  search for the vocal model and CACHES the found path, so later runs are
 rem  instant.
 rem
 rem  Drop this file into the ROOT of any extracted pack folder and double-click.
 rem  It finds every audio clip in every subfolder, separates the voice with the
 rem  SAME model + settings you use in Ultimate Vocal Remover v5.6.1:
-rem     Process method : MDX-Net (Roformer)
-rem     Model          : MB-Roformer-Kim  (loaded from YOUR UVR models folder)
-rem     Segment size   : 3680
-rem     Overlap        : 4
+rem     Process method : MDX-Net
+rem     Model          : the vocal .ckpt found in YOUR UVR models folder
+rem                      (or the one pinned in MODEL_PATH below)
+rem     Segment size   : SEGMENT_SIZE below - use your model's value
+rem     Overlap        : OVERLAP_MDXC below
 rem     GPU Conversion : ON
 rem     Vocals Only    : ON     (no background / instrumental file is kept)
 rem     Output format  : WAV, in the SAME folder as the source clip
@@ -32,7 +33,7 @@ set "OVERLAP_MDXC=4"
 set "WAV_TYPE=PCM_16"
 set "MODEL_PATH="
 rem If auto-find fails, paste your model path on the line above, e.g.
-rem set "MODEL_PATH=C:\Path\To\Ultimate Vocal Remover\models\MDX_Net_Models\MelBand_Roformer_Kim.ckpt"
+rem set "MODEL_PATH=C:\Path\To\Ultimate Vocal Remover\models\MDX_Net_Models\YourVocalModel.ckpt"
 rem ----------------------------------------------------------------------------
 
 set "ROOT=%~dp0"
@@ -63,11 +64,11 @@ if not defined UVR_CMD (
 )
 echo Runner: %UVR_CMD%
 
-rem ------------------------ find the Kim model --------------------------------
+rem ------------------------ find the vocal model --------------------------------
 call :find_model
 if not defined MODEL_PATH (
     echo.
-    echo  [!] Searched the whole PC - the MB-Roformer-Kim model was not found.
+    echo  [!] Searched the whole PC - no vocal model (.ckpt) was found.
     echo      Set MODEL_PATH at the top of this file to the full path of
     echo      the model file in your UVR models folder, then run again.
     echo.
@@ -111,7 +112,7 @@ set "UVRD4=C:\Ultimate Vocal Remover\models\MDX_Net_Models"
 set "UVRD5=%USERPROFILE%\Ultimate Vocal Remover\models\MDX_Net_Models"
 for %%D in ("%UVRD1%" "%UVRD2%" "%UVRD3%" "%UVRD4%" "%UVRD5%") do (
     if not defined MODEL_PATH if exist "%%~D" (
-        for %%P in ("MelBandRoformer.ckpt" "*MelBand*Roformer*.ckpt" "*MelBand*Kim*.ckpt" "*Roformer*Kim*.ckpt" "*Kim*.ckpt" "*Kim*.pth") do (
+        for %%P in ("*.ckpt" "*.pth") do (
             if not defined MODEL_PATH (
                 for /f "delims=" %%X in ('dir /b "%%~D\%%~P" 2^>nul') do if not defined MODEL_PATH set "MODEL_PATH=%%~D\%%X"
             )
@@ -121,8 +122,8 @@ for %%D in ("%UVRD1%" "%UVRD2%" "%UVRD3%" "%UVRD4%" "%UVRD5%") do (
 if defined MODEL_PATH goto :cache_model
 
 rem 4) full-PC PowerShell hunt (first run can take a bit - it remembers)
-echo Hunting for the MB-Roformer-Kim model across this PC - one time only...
-powershell -NoProfile -ExecutionPolicy Bypass -Command "$roots = @($env:LOCALAPPDATA, $env:APPDATA, $env:ProgramFiles, ${env:ProgramFiles(x86)}, $env:USERPROFILE, 'D:\', 'E:\', 'F:\', 'G:\', 'H:\'); $f = Get-ChildItem -Path $roots -Include 'MelBandRoformer.ckpt', '*MelBand*Roformer*.ckpt', '*Kim*.ckpt', '*Kim*.pth' -File -Recurse -Depth 7 -ErrorAction SilentlyContinue | Select-Object -First 1; if ($f) { $f.FullName }" > "%TEMP%\vp_model_found.txt" 2>nul
+echo Hunting for a vocal model (.ckpt) across this PC - one time only...
+powershell -NoProfile -ExecutionPolicy Bypass -Command "$roots = @($env:LOCALAPPDATA, $env:APPDATA, $env:ProgramFiles, ${env:ProgramFiles(x86)}, $env:USERPROFILE, 'D:\', 'E:\', 'F:\', 'G:\', 'H:\'); $f = Get-ChildItem -Path $roots -Directory -Recurse -Depth 6 -Filter 'MDX_Net_Models' -ErrorAction SilentlyContinue | ForEach-Object { Get-ChildItem $_.FullName -Filter '*.ckpt' -File -ErrorAction SilentlyContinue } | Select-Object -First 1; if ($f) { $f.FullName }" > "%TEMP%\vp_model_found.txt" 2>nul
 if exist "%TEMP%\vp_model_found.txt" (
     set /p MODEL_PATH=<"%TEMP%\vp_model_found.txt"
     if defined MODEL_PATH if not exist "%MODEL_PATH%" set "MODEL_PATH="

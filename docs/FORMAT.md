@@ -82,9 +82,9 @@ Voice (UVR, MDX-Net):
 
 | Setting | Value |
 | --- | --- |
-| Model | MB-Roformer-Kim (`MelBandRoformer.ckpt`) |
-| Segment size | 3680 |
-| Overlap | 4 |
+| Model | any MDX-Net vocal model (.ckpt) from UVR's model downloads; the bat uses the one in UVR's models folder, or the file MODEL_PATH points at |
+| Segment size | SEGMENT_SIZE in the bat; use your model's recommended value |
+| Overlap | OVERLAP_MDXC in the bat |
 | GPU conversion | on |
 | Vocals only | on (no instrumental file kept) |
 | Output | WAV PCM 16-bit, same folder and name as the source |
@@ -94,7 +94,7 @@ Images (Real-ESRGAN):
 
 | Setting | Value |
 | --- | --- |
-| Model | realesrgan-x4plus-anime, scale 4 |
+| Model | I_MODEL in ALL_IN_ONE (scale is I_SCALE); the ncnn release ships several models |
 | Finish | downscale only, to 2560 px wide JPG |
 | Quality | 95, stepping down by 5 until the file fits 2,000,000 bytes |
 | Skip rule | sources already 2560 px wide or wider are left untouched |

@@ -16,9 +16,9 @@ rem
 rem  Why this exists: Ultimate Vocal Remover's UVR.exe is GUI-only - it has no
 rem  command line at all, so a .bat cannot drive the window. This setup installs
 rem  "uvr-headless-runner": a command-line runner built to replicate UVR's GUI
-rem  behavior exactly. CLEAN_VOICE_ALL.bat loads the SAME MB-Roformer-Kim model
-rem  file that sits in your UVR models folder, with your exact settings
-rem  (MDX-Net / segment 3680 / overlap 4 / GPU / vocals only / WAV).
+rem  behavior exactly. CLEAN_VOICE_ALL.bat loads the SAME vocal model file
+rem  that sits in your UVR models folder, with the settings at the top of
+rem  that file (MDX-Net / GPU / vocals only / WAV).
 rem
 rem  It installs into:  %LOCALAPPDATA%\VideoPipeline\CleanVoice\venv   (UVR untouched)
 rem  The GPU PyTorch download is LARGE (a few GB). On a slow connection let it

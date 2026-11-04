@@ -9,10 +9,10 @@ rem  drop it into the ROOT of any extracted pack folder and double-click.
 rem
 rem  For EACH folder, in order:
 rem     1) AUDIO  - every clip -^> vocals-only WAV, same folder/name, MP3
-rem        replaced. (UVR settings: MDX-Net, MB-Roformer-Kim =
-rem        MelBandRoformer.ckpt from your UVR folder, segment 3680,
-rem        overlap 4, GPU on, Vocals Only on, WAV out, headless runner.)
-rem     2) IMAGES - every image -^> Real-ESRGAN x4plus-anime 4x, finished as
+rem        replaced. (UVR, MDX-Net: it uses the vocal model .ckpt it
+rem        finds in your UVR models folder - MODEL_PATH below pins
+rem        one file. GPU on, Vocals Only on, WAV out, headless runner.)
+rem     2) IMAGES - every image -^> Real-ESRGAN 4x, finished as
 rem        2560px JPG quality 95 (steps down only to fit YouTube's
 rem        2,000,000-byte thumbnail limit), original replaced in place.
 rem        Images already 2560px or wider are skipped.
@@ -40,8 +40,9 @@ set "A_SEGMENT_SIZE=3680"
 set "A_OVERLAP_MDXC=4"
 set "A_WAV_TYPE=PCM_16"
 set "MODEL_PATH="
-rem  Images:
-set "I_MODEL=realesrgan-x4plus-anime"
+rem  Images: (I_MODEL names any model in your Real-ESRGAN models
+rem  folder - the ncnn release ships several, the names say the target)
+set "I_MODEL=realesrgan-x4plus"
 set "I_SCALE=4"
 set "I_TILE=0"
 set "I_THREADS=1:2:2"
@@ -90,8 +91,8 @@ if defined AUDIO_OK (
     echo Audio model  : %MODEL_PATH%
 ) else (
     echo Audio engine : NOT READY - audio halves will be skipped.
-    echo                ^(Run SETUP_CLEAN_VOICE.bat once, and check the Kim
-    echo                 model exists in your UVR models folder.^)
+    echo                ^(Run SETUP_CLEAN_VOICE.bat once, and check a vocal
+    echo                 model .ckpt exists in your UVR models folder.^)
 )
 
 call :find_esrgan
@@ -230,7 +231,7 @@ set "UVRD4=C:\Ultimate Vocal Remover\models\MDX_Net_Models"
 set "UVRD5=%USERPROFILE%\Ultimate Vocal Remover\models\MDX_Net_Models"
 for %%D in ("%UVRD1%" "%UVRD2%" "%UVRD3%" "%UVRD4%" "%UVRD5%") do (
     if not defined MODEL_PATH if exist "%%~D" (
-        for %%P in ("MelBandRoformer.ckpt" "*MelBand*Roformer*.ckpt" "*MelBand*Kim*.ckpt" "*Roformer*Kim*.ckpt" "*Kim*.ckpt" "*Kim*.pth") do (
+        for %%P in ("*.ckpt" "*.pth") do (
             if not defined MODEL_PATH (
                 for /f "delims=" %%X in ('dir /b "%%~D\%%~P" 2^>nul') do if not defined MODEL_PATH set "MODEL_PATH=%%~D\%%X"
             )
@@ -238,8 +239,8 @@ for %%D in ("%UVRD1%" "%UVRD2%" "%UVRD3%" "%UVRD4%" "%UVRD5%") do (
     )
 )
 if defined MODEL_PATH goto :cache_model
-echo Hunting for the MB-Roformer-Kim model across this PC - one time only...
-powershell -NoProfile -ExecutionPolicy Bypass -Command "$roots = @($env:LOCALAPPDATA, $env:APPDATA, $env:ProgramFiles, ${env:ProgramFiles(x86)}, $env:USERPROFILE, 'D:\', 'E:\', 'F:\', 'G:\', 'H:\'); $f = Get-ChildItem -Path $roots -Include 'MelBandRoformer.ckpt', '*MelBand*Roformer*.ckpt', '*Kim*.ckpt', '*Kim*.pth' -File -Recurse -Depth 7 -ErrorAction SilentlyContinue | Select-Object -First 1; if ($f) { $f.FullName }" > "%TEMP%\vp_model_found.txt" 2>nul
+echo Hunting for a vocal model (.ckpt) across this PC - one time only...
+powershell -NoProfile -ExecutionPolicy Bypass -Command "$roots = @($env:LOCALAPPDATA, $env:APPDATA, $env:ProgramFiles, ${env:ProgramFiles(x86)}, $env:USERPROFILE, 'D:\', 'E:\', 'F:\', 'G:\', 'H:\'); $f = Get-ChildItem -Path $roots -Directory -Recurse -Depth 6 -Filter 'MDX_Net_Models' -ErrorAction SilentlyContinue | ForEach-Object { Get-ChildItem $_.FullName -Filter '*.ckpt' -File -ErrorAction SilentlyContinue } | Select-Object -First 1; if ($f) { $f.FullName }" > "%TEMP%\vp_model_found.txt" 2>nul
 if exist "%TEMP%\vp_model_found.txt" (
     set /p MODEL_PATH=<"%TEMP%\vp_model_found.txt"
     if defined MODEL_PATH if not exist "%MODEL_PATH%" set "MODEL_PATH="
