@@ -1,6 +1,7 @@
 # Linea
 
 [![YouTube](https://img.shields.io/badge/YouTube-@iK4w4-FF0000?logo=youtube&logoColor=white)](https://www.youtube.com/@iK4w4)
+[![Telegram](https://img.shields.io/badge/Telegram-@iK4w4-26A5E4?logo=telegram&logoColor=white)](https://t.me/iK4w4)
 
 A Windows batch pipeline that turns short anime dialogue clips and screenshots
 into finished 4K YouTube videos. It is the tooling behind a dialogue-line
