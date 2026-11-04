@@ -1,0 +1,18 @@
+# media and working state
+*.mp4
+*.mkv
+*.wav
+*.mp3
+*.m4a
+*.flac
+*.ogg
+*.log
+*_log.txt
+VIDEOS/
+import/
+export/
+photo_work/
+video_work/
+*_work/
+_uvr_tmp/
+counts.txt
