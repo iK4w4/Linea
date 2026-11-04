@@ -2,7 +2,8 @@
 setlocal EnableDelayedExpansion
 title Clean Voice - UVR batch (MB-Roformer-Kim, vocals only, WAV)
 rem ============================================================================
-rem  CLEAN_VOICE_ALL.bat  v2  -  by iK4w4
+rem  CLEAN_VOICE_ALL.bat  v2  -  part of Linea (https://github.com/iK4w4/Linea)
+rem  Copyright (c) 2026 Kawa (@iK4w4) - MIT License
 rem  v2: model hunt upgraded - v1 only checked 5 guessed UVR folders and
 rem  missed non-standard installs. v2 falls back to a full-PC PowerShell
 rem  search for the Kim model and CACHES the found path, so later runs are

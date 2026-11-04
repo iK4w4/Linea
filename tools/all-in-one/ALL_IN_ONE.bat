@@ -2,7 +2,8 @@
 setlocal EnableDelayedExpansion
 title ALL IN ONE v2 - folder by folder: Clean Voice (UVR) + Upscale Images (Real-ESRGAN)
 rem ============================================================================
-rem  ALL_IN_ONE.bat  v2  -  by iK4w4
+rem  ALL_IN_ONE.bat  v2  -  part of Linea (https://github.com/iK4w4/Linea)
+rem  Copyright (c) 2026 Kawa (@iK4w4) - MIT License
 rem  ONE bat for the whole pack, FOLDER BY FOLDER:
 rem  drop it into the ROOT of any extracted pack folder and double-click.
 rem

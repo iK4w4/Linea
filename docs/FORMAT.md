@@ -93,3 +93,7 @@ Images (Real-ESRGAN):
 | Quality | 95, stepping down by 5 until the file fits 2,000,000 bytes |
 | Skip rule | sources already 2560 px wide or wider are left untouched |
 | Replacement | in place; PNG masters exist only during the run |
+
+---
+
+Part of [Linea](https://github.com/iK4w4/Linea) · © 2026 Kawa (@iK4w4) · MIT License

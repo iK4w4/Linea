@@ -3,6 +3,8 @@ setlocal EnableDelayedExpansion
 title Clean Voice - one-time setup v3 (headless UVR runner)
 rem ============================================================================
 rem  SETUP_CLEAN_VOICE.bat  v3  -  run this ONCE on this PC.
+rem  Part of Linea (https://github.com/iK4w4/Linea)
+rem  Copyright (c) 2026 Kawa (@iK4w4) - MIT License
 rem
 rem  Version history of pain:
 rem   v1: found the bare "py" launcher on a PC with no Python -> venv failed.

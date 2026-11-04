@@ -2,6 +2,10 @@
 setlocal
 title Real-CUGAN Studio - photos + videos, every model, one bat
 cd /d "%~dp0"
+:: ==================================================
+::  REALCUGAN.bat - part of Linea (https://github.com/iK4w4/Linea)
+::  Copyright (c) 2026 Kawa (@iK4w4) - MIT License
+:: ==================================================
 
 :: ==================== SETTINGS ====================
 :: Photo output: JPG width, JPEG quality, max bytes (YouTube limit 2 MB)

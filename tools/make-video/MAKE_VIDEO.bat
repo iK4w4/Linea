@@ -2,7 +2,8 @@
 setlocal EnableDelayedExpansion
 title MAKE_VIDEO - one folder, one line, finished video(s)
 rem =====================================================================
-rem  MAKE_VIDEO.bat  by iK4w4
+rem  MAKE_VIDEO.bat  -  part of Linea (https://github.com/iK4w4/Linea)
+rem  Copyright (c) 2026 Kawa (@iK4w4) - MIT License
 rem  Drop this ONE file inside a single line folder (e.g. a RANK folder,
 rem  AFTER ALL_IN_ONE cleaned the audio and upscaled the screenshots)
 rem  and double-click it. It renders the finished YouTube video(s) for
