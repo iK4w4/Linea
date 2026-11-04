@@ -2,6 +2,7 @@
 
 [![YouTube](https://img.shields.io/badge/YouTube-@iK4w4-FF0000?logo=youtube&logoColor=white)](https://www.youtube.com/@iK4w4)
 [![Telegram](https://img.shields.io/badge/Telegram-@iK4w4-26A5E4?logo=telegram&logoColor=white)](https://t.me/iK4w4)
+[![Telegram Bot](https://img.shields.io/badge/Telegram_Bot-@AskKawaBot-26A5E4?logo=telegram&logoColor=white)](https://t.me/AskKawaBot)
 
 A Windows batch pipeline that turns short anime dialogue clips and screenshots
 into finished 4K YouTube videos. It is the tooling behind a dialogue-line
@@ -169,7 +170,8 @@ the top of the file (MODEL_PATH, ESRGAN_PATH).
 
 Linea is a project by Kawa ([@iK4w4](https://github.com/iK4w4)).
 The videos are on [YouTube](https://www.youtube.com/@iK4w4); the author is
-also on [Telegram](https://t.me/iK4w4).
+also on [Telegram](https://t.me/iK4w4). Questions and requests
+go to the contact bot: [@AskKawaBot](https://t.me/AskKawaBot).
 
 The batch files and documentation in this repository are released
 under the MIT License (see [LICENSE](LICENSE)).
