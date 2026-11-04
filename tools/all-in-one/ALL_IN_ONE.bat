@@ -34,7 +34,9 @@ rem ============================================================================
 
 rem ------------------------------ settings ------------------------------------
 rem  Audio:
-set "A_DELETE_SOURCE=1"
+rem  A_DELETE_SOURCE: 0 = keep the source clip after a successful clean
+rem  (the safe default). Set it to 1 only if you want sources deleted.
+set "A_DELETE_SOURCE=0"
 set "A_USE_GPU=1"
 set "A_SEGMENT_SIZE=3680"
 set "A_OVERLAP_MDXC=4"

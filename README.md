@@ -14,6 +14,12 @@ UVR model, Real-ESRGAN and Real-CUGAN. No binaries, models or media are
 included. You bring the engines (see Prerequisites) and your own assets
 (see `assets/`).
 
+One safety note before you run anything: these tools work in place.
+ALL_IN_ONE.bat can delete a source clip after its clean succeeds -
+that is off by default (`A_DELETE_SOURCE=0` at the top of the file).
+Turn it on only if you want the originals gone, and work on a copy of
+anything you cannot replace.
+
 ## Pipeline
 
 ```
@@ -102,8 +108,8 @@ State: `%LOCALAPPDATA%\VideoPipeline\MakeVideo` (the ffmpeg cache) and
 ### ALL_IN_ONE.bat
 Drop it at the root of a folder tree, for example an episode pack with
 one subfolder per line, and run it. For each folder it turns every clip
-into a vocals-only WAV in place (the source is deleted on success, the
-`A_DELETE_SOURCE` toggle at the top turns that off), then upscales
+into a vocals-only WAV in place (the source is kept by default; the
+`A_DELETE_SOURCE` toggle at the top can delete it on success), then upscales
 every image in the folder, then moves on. If one engine is missing,
 that half is skipped for the folder with a message and the other half
 still runs.
@@ -186,3 +192,7 @@ contact bot: [@AskKawaBot](https://t.me/AskKawaBot).
 
 The batch files and documentation in this repository are released
 under the MIT License (see [LICENSE](LICENSE)).
+
+You are responsible for having the rights to the clips, images and
+audio you process with these tools. No media is included in this
+repository.
