@@ -1,9 +1,13 @@
 # Linea
 
+[![YouTube](https://img.shields.io/badge/YouTube-@iK4w4-FF0000?logo=youtube&logoColor=white)](https://www.youtube.com/@iK4w4)
+
 A Windows batch pipeline that turns short anime dialogue clips and screenshots
 into finished 4K YouTube videos. It is the tooling behind a dialogue-line
 channel format: one spoken line per video, cleaned voice, one still frame,
 fixed intro, loudness-normalized to the YouTube target.
+
+Linea is the production pipeline behind the dialogue-line videos on the author's [YouTube channel](https://www.youtube.com/@iK4w4) - the videos there are rendered with these tools.
 
 Everything here is orchestration. The pipeline is five `.bat` files driving
 ffmpeg, an Ultimate Vocal Remover model, Real-ESRGAN and Real-CUGAN. No
@@ -136,5 +140,35 @@ Two format decisions are deliberate and worth knowing before changing them:
 
 ## Configuration
 
-Every tun
-...[truncated]
+Every tunable lives in a settings block at the top of its bat file: the
+dim level and encoder presets in MAKE_VIDEO, model names, segment size
+and target widths in ALL_IN_ONE and CLEAN_VOICE_ALL, tile size, threads
+and CQ in REALCUGAN. Nothing is configured by editing the middle of a
+script. Paths to engines are auto-detected on first run and cached;
+every cache can be bypassed by setting the matching path variable at
+the top of the file (MODEL_PATH, ESRGAN_PATH).
+
+## Troubleshooting
+
+- **ffmpeg not found (MAKE_VIDEO).** The automatic download failed or
+  was blocked. Get the gyan.dev essentials build manually, and put
+  ffmpeg.exe and ffprobe.exe next to MAKE_VIDEO.bat.
+- **MB-Roformer-Kim model not found.** The bats search the standard UVR
+  folders, then the whole PC, once. If the model lives somewhere
+  unusual, set MODEL_PATH at the top of the bat to the full path of the
+  .ckpt file.
+- **The progress monitor could not start (REALCUGAN).** The monitor is
+  a PowerShell script the bat extracts from itself. Antivirus or a
+  locked-down execution policy can block it; the bat cannot run
+  without it.
+- **No intro card found (MAKE_VIDEO).** Place intro.jpg or intro.png
+  next to the bat. A placeholder ships in `assets/`.
+
+## Author
+
+Linea is a project by Kawa ([@iK4w4](https://github.com/iK4w4)).
+The videos are on [YouTube](https://www.youtube.com/@iK4w4); the author is
+also on [Telegram](https://t.me/iK4w4).
+
+The batch files and documentation in this repository are released
+under the MIT License (see [LICENSE](LICENSE)).
